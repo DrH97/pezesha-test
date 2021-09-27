@@ -28,6 +28,8 @@ and
 
 1. The data could also be uploaded in compressed format for faster, more efficient upload; the con of this is on the server side, a process to extract the data would have to be catered for.
 2. The data could also be uploaded in chunks by processing the csv client side.
+3. An increase in php's max increase time would be required to handle the large file
+4. Alternatively, we could create a process/job that keeps updating the database with the row number(status) while saving the data, that way the app can pick up where it left off on case of any failures.
 
 ### Qn 1
 - For the marvel characters, improvements could be made by adding a store (vuex) with persistent data for better caching and data management.

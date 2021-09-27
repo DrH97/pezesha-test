@@ -4,13 +4,14 @@ namespace App\Imports;
 
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-Use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 HeadingRowFormatter::default('none');
 
-class OrderDataImport implements ToModel, WithHeadingRow
+class OrderDataImport implements ToModel, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
 
     /**
@@ -32,6 +33,16 @@ class OrderDataImport implements ToModel, WithHeadingRow
             'customer_id' => $row['CustomerID'],
             'country' => $row['Country'],
         ]);
+    }
+
+    public function batchSize(): int
+    {
+        return 100;
+    }
+
+    public function chunkSize(): int
+    {
+        return 100;
     }
 
 }
