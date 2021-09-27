@@ -4,7 +4,7 @@ Built using:
 
 and 
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/vuejs/art/master/logo.svg" height="100"></a></p>
+<p align="center"><a href="https://vuejs.org" target="_blank"><img src="https://raw.githubusercontent.com/vuejs/art/master/logo.svg" height="100"></a></p>
 
 
 
@@ -17,10 +17,12 @@ and
 - Run `php artisan migrate`
 - Run `php artisan serve`
 - Voilà! Should be running on port `8000` if all went well.
+
+
 ## Possible Failures and Areas of Improvement
 
 ### Qn 2
-- Database Constraints such as non-nullable data isn't enforced. We could remove nullables for the columns that require data.
+- Database Constraints such as non-nullable data isn't enforced. We would remove nullables for the columns that require data.
 - Data validation for the CSV data is non-existent. For instance, does the scenario allow for negative quantity?
 - Proper database structure isn't followed. For instance, CustomerID and Country could be made into relationships in real world data.
 
@@ -28,10 +30,11 @@ and
 2. The data could also be uploaded in chunks by processing the csv client side.
 
 ### Qn 1
-- For the marvel characters, improvements could be made by adding a store with persistent data for better caching and data management.
+- For the marvel characters, improvements could be made by adding a store (vuex) with persistent data for better caching and data management.
+- Adding pagination and maybe infinite scrolling for the data.
 
 ## To note:
 
 - The marvel api seems to completely refuse to accept client calls from localhost even when whitelisted in my account.
-- I therefore had a slight workaround and used static data but still had code that would call the api, get data and process it accordingly.
+- I therefore had a slight workaround and used static data but still had logic that would call the api, get data and process it accordingly.
 
