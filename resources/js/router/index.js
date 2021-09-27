@@ -26,7 +26,7 @@ function configRoutes() {
                     component: Component1
                 },
                 {
-                    path: '2',
+                    path: 'file-upload',
                     name: 'Question2',
                     component: Component2
 

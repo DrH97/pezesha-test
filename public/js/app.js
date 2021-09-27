@@ -22467,10 +22467,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Component2',
+  data: function data() {
+    return {
+      file: ''
+    };
+  },
   mounted: function mounted() {
     console.log('Component mounted.');
+  },
+  methods: {
+    handleFileUpload: function handleFileUpload() {
+      this.file = this.$refs.file.files[0];
+    },
+    submitFile: function submitFile() {
+      var formData = new FormData();
+      formData.append('file', this.file);
+      axios.post('file-upload', formData, {
+        baseURL: window.location.origin + '/api/v1/',
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (v) {
+        console.log('SUCCESS!!', v);
+      })["catch"](function (e) {
+        console.log('FAILURE!!', e);
+      });
+    }
   }
 });
 
@@ -22786,20 +22815,23 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue */ "./resources/js/App.vue");
 /* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router */ "./resources/js/router/index.js");
-/* harmony import */ var _coreui_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @coreui/vue */ "./node_modules/@coreui/vue/dist/coreui-vue.common.js");
-/* harmony import */ var _coreui_vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_coreui_vue__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _coreui_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @coreui/vue */ "./node_modules/@coreui/vue/dist/coreui-vue.common.js");
+/* harmony import */ var _coreui_vue__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_coreui_vue__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _directive__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./directive */ "./resources/js/directive.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_2__["default"].config.performance = true;
-vue__WEBPACK_IMPORTED_MODULE_2__["default"].use((_coreui_vue__WEBPACK_IMPORTED_MODULE_3___default()));
-var app = new vue__WEBPACK_IMPORTED_MODULE_2__["default"]({
+
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].config.performance = true;
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].use((_coreui_vue__WEBPACK_IMPORTED_MODULE_4___default()));
+vue__WEBPACK_IMPORTED_MODULE_3__["default"].directive("image-fall-back", _directive__WEBPACK_IMPORTED_MODULE_2__["default"]);
+var app = new vue__WEBPACK_IMPORTED_MODULE_3__["default"]({
   el: '#app',
   router: _router__WEBPACK_IMPORTED_MODULE_1__["default"],
   // store,
@@ -23151,6 +23183,56 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/directive.js":
+/*!***********************************!*\
+  !*** ./resources/js/directive.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  bind: function bind(el, binding) {
+    try {
+      var value = binding.value;
+      var loader = 'images/loading.gif';
+      var fallBackImage = 'images/broken-1.png';
+      var img = new Image();
+      var loading = loader;
+      var error = fallBackImage;
+      var original = el.src;
+
+      if (typeof value === 'string') {
+        loading = value;
+        error = value;
+      }
+
+      if (value instanceof Object) {
+        loading = value.imageLoader || loader;
+        error = value.fallBackImage || fallBackImage;
+      }
+
+      img.src = original;
+      el.src = loading;
+
+      img.onload = function () {
+        el.src = original;
+      };
+
+      img.onerror = function () {
+        el.src = error;
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/router/index.js":
 /*!**************************************!*\
   !*** ./resources/js/router/index.js ***!
@@ -23195,7 +23277,7 @@ function configRoutes() {
       name: 'Dashboard',
       component: _components_Component1__WEBPACK_IMPORTED_MODULE_1__["default"]
     }, {
-      path: '2',
+      path: 'file-upload',
       name: 'Question2',
       component: _components_Component2__WEBPACK_IMPORTED_MODULE_2__["default"]
     }]
@@ -41797,7 +41879,7 @@ var render = function() {
           "div",
           { staticClass: "col" },
           [
-            _c("router-link", { attrs: { to: "/Question2" } }, [
+            _c("router-link", { attrs: { to: "/file-upload" } }, [
               _c("h1", [_vm._v("File Upload")])
             ])
           ],
@@ -41851,6 +41933,9 @@ var render = function() {
             _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "c-avatar text-center" }, [
                 _c("img", {
+                  directives: [
+                    { name: "image-fall-back", rawName: "v-image-fall-back" }
+                  ],
                   staticClass: "c-avatar-img",
                   attrs: { src: item.thumbnail.path, alt: "", width: "150px" }
                 })
@@ -41894,26 +41979,47 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n                    Upload File\n                ")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" })
+  return _c("div", { staticClass: "row my-5" }, [
+    _c("div", { staticClass: "col-12" }, [
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _vm._v("\n                Upload File\n            ")
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "large-12 medium-12 small-12 cell" }, [
+            _c("label", [
+              _vm._v("File\n                        "),
+              _c("input", {
+                ref: "file",
+                attrs: { type: "file", id: "file" },
+                on: {
+                  change: function($event) {
+                    return _vm.handleFileUpload()
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { disabled: !_vm.file },
+                on: {
+                  click: function($event) {
+                    return _vm.submitFile()
+                  }
+                }
+              },
+              [_vm._v("Submit")]
+            )
+          ])
         ])
       ])
     ])
-  }
-]
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

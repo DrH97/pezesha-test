@@ -9,7 +9,7 @@
 
                 <div class="card-body">
                     <div class="c-avatar text-center">
-                        <img :src="item.thumbnail.path" class="c-avatar-img" alt="" width="150px">
+                        <img v-image-fall-back :src="item.thumbnail.path" class="c-avatar-img" alt="" width="150px">
                     </div>
                 </div>
 

@@ -7,7 +7,7 @@
                 <router-link to="/"><h1>Marvel Characters</h1></router-link>
             </div>
             <div class="col">
-                <router-link to="/Question2"><h1>File Upload</h1></router-link>
+                <router-link to="/file-upload"><h1>File Upload</h1></router-link>
             </div>
         </div>
 
