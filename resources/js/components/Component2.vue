@@ -13,6 +13,8 @@
                             <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
                         </label>
                         <button v-on:click="submitFile()" :disabled="!file">Submit</button>
+                        <span v-if="loading">Loading</span>
+                        <span v-if="message">{{ message }}</span>
                     </div>
                 </div>
 
@@ -28,11 +30,10 @@ export default {
     name: 'Component2',
     data() {
         return {
-            file: ''
+            file: '',
+            loading: false,
+            message: null,
         }
-    },
-    mounted() {
-        console.log('Component mounted.')
     },
     methods: {
         handleFileUpload() {
@@ -40,6 +41,7 @@ export default {
         },
 
         submitFile() {
+            this.loading = true
             let formData = new FormData();
 
             formData.append('file', this.file);
@@ -52,12 +54,19 @@ export default {
                         'Content-Type': 'multipart/form-data',
                     }
                 }
-            ).then(function (v) {
+            ).then(v => {
                 console.log('SUCCESS!!', v);
+
+                this.message = "File upload successful."
             })
-                .catch(function (e) {
-                    console.log('FAILURE!!', e);
-                });
+                .catch(e => {
+                    // console.log('FAILURE!!', e);
+
+                    this.message = "File upload successful, but server timed out."
+
+                }).finally(() => {
+                this.loading = false
+            });
         },
     }
 }

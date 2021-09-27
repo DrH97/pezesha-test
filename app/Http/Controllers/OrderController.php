@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\OrderDataImport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
@@ -18,7 +19,11 @@ class OrderController extends Controller
     public function fileUpload(Request $request)
     {
         //
-        Excel::import(new OrderDataImport(), $request->file);
+        try {
+            Excel::import(new OrderDataImport(), $request->file);
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
 
         return response()->json([
             'status' => 'success',

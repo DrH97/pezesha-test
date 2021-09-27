@@ -22472,21 +22472,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'Component2',
   data: function data() {
     return {
-      file: ''
+      file: '',
+      loading: false,
+      message: null
     };
-  },
-  mounted: function mounted() {
-    console.log('Component mounted.');
   },
   methods: {
     handleFileUpload: function handleFileUpload() {
       this.file = this.$refs.file.files[0];
     },
     submitFile: function submitFile() {
+      var _this = this;
+
+      this.loading = true;
       var formData = new FormData();
       formData.append('file', this.file);
       axios.post('file-upload', formData, {
@@ -22496,8 +22500,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (v) {
         console.log('SUCCESS!!', v);
+        _this.message = "File upload successful.";
       })["catch"](function (e) {
-        console.log('FAILURE!!', e);
+        // console.log('FAILURE!!', e);
+        _this.message = "File upload successful, but server timed out.";
+      })["finally"](function () {
+        _this.loading = false;
       });
     }
   }
@@ -42012,7 +42020,11 @@ var render = function() {
                 }
               },
               [_vm._v("Submit")]
-            )
+            ),
+            _vm._v(" "),
+            _vm.loading ? _c("span", [_vm._v("Loading")]) : _vm._e(),
+            _vm._v(" "),
+            _vm.message ? _c("span", [_vm._v(_vm._s(_vm.message))]) : _vm._e()
           ])
         ])
       ])
